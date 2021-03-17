@@ -11,7 +11,8 @@ var muteBtn;
 var progressBar;
 var progress;
 var flag=0;
-
+var expStart;
+var expEnd;
 
 
 function initialiseMediaPlayer() {
@@ -88,7 +89,19 @@ function changePos(event) {
     // video.currentTime = (pos*video.duration);
     var box = progressBar.getBoundingClientRect();
     var pos = (event.pageX - box.left) / box.width;
-    mediaPlayer.currentTime = (pos * mediaPlayer.duration);
+    // Check that selected time is within the segment or not
+    segStart = parseInt(localStorage.getItem("expStart"))
+    segEnd = parseInt(localStorage.getItem("expEnd"))
+    if ((pos * mediaPlayer.duration) < segStart - 0.2) {
+        mediaPlayer.currentTime = segStart - 0.2
+    }
+    else if ((pos * mediaPlayer.duration) > segEnd + 0.2) {
+      mediaPlayer.currentTime = segEnd + 0.2
+    }
+    else {
+      mediaPlayer.currentTime = (pos * mediaPlayer.duration);
+    }
+
     createClickLog("progBar", (pos * mediaPlayer.duration));
 }
 
@@ -124,8 +137,39 @@ function replayMedia() {
 function updateProgressBar() {
     // Work out how much of the media has played via the duration and currentTime parameters
     var percentage = Math.floor((100 / mediaPlayer.duration) * mediaPlayer.currentTime);
+    // // Use percentage of segment instead of percentage of video
+    //
+    // var expStartPercentage = Math.floor(expStart * 100)
+    // var expEndPercentage = Math.floor(expEnd * 100)
+    // var expDuration = expEndPercentage - expStartPercentage;
+    // var expPercentage = (percentage - expStartPercentage) / expDuration;
+    //
+    // console.log("percentage: " + percentage)
+    // console.log("expDuration: " + expDuration)
+    // console.log("expStart: " + expStart + " expEnd: " + expEnd)
+    // console.log("expStartPercentage: " + expStartPercentage + " expEndPercentage: " + expEndPercentage)
+    //
+    // console.log("expPercentage: " + expPercentage)
     // Update the progress bar's value
-    progressBar.value = percentage;
+    progressBar.value = Math.floor(percentage);
+
+
+    // Make the player stay within the segment
+    var vid=document.getElementById("media-video");
+    console.log(mediaPlayer.currentTime)
+    segStart = parseInt(localStorage.getItem("expStart"))
+    segEnd = parseInt(localStorage.getItem("expEnd"))
+
+    if (mediaPlayer.currentTime < segStart - 0.2) {
+      vid.currentTime = segStart - 0.2
+      vid.pause()
+    }
+    else if (mediaPlayer.currentTime > segEnd + 0.2) {
+      vid.currentTime = segEnd + 0.2
+      vid.pause()
+    }
+
+
     // Update the progress bar's text (for browsers that don't support the progress element)
     // progressBar.innerHTML = percentage + '% played';
     $("#dynamic")
@@ -235,11 +279,17 @@ function segment_buttons(start,end,explanations,associations) {
         var obj={};
         var startPercentage = start[i] / mPlayer.duration;
         var startPosition = Math.floor(startPercentage * w);
-        // console.log(startPosition);
+        expStart = startPercentage;
+        localStorage.setItem("expStart", start[i])
 
         var endPercentage = end[i] / mPlayer.duration;
         var endPosition = Math.floor(endPercentage * w);
+        expEnd = endPercentage;
         var sequenceDuration = endPosition - startPosition;
+        localStorage.setItem("expEnd", end[i])
+
+        // expEnd = Math.floor(expEnd)
+        // expStart = Math.floor(expStart)
 
         obj.pos = startPosition;
         obj.width = sequenceDuration;
@@ -392,6 +442,7 @@ function change_segment(time,end,explanations,associations){
 
     // t=d3.timer(timeOut); //if you want the segment playing to stop, comment this line out
 
+    // loop_segment(expStart, expEnd);
     clear_list();
     loadData(explanations, associations);
 }
@@ -450,12 +501,12 @@ function loop_segment(time,end) {
             if(flag)
             {
                 vid.currentTime=time;
-                // vid.play();
-                // d3.timerFlush();
+                vid.play();
+                d3.timerFlush();
                 t.restart(timeOut);
 
-                // loop_segment(time,end);
-                // t.stop();
+                loop_segment(time,end);
+                t.stop();
             }
 
             else

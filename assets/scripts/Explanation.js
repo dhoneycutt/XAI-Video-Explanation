@@ -12,7 +12,7 @@ function loadData(explanationsData, associationData) {
 
     var listOfCombinations = []
     for(var i = 0; i < explanationsData.length; i++) {
-      var tempString = explanationsData[i]['activity'] + " + " + explanationsData[i]['object'] + " + " + explanationsData[i]['location']
+      var tempString = explanationsData[i]['action'] + " + " + explanationsData[i]['object'] + " + " + explanationsData[i]['location']
       listOfCombinations.push(tempString)
     }
 
@@ -28,10 +28,11 @@ function loadData(explanationsData, associationData) {
     var combinationSort = Sortable.create(el);
     var userOrder = el.getElementsByTagName("li");
     orderIDs = makeIDList(userOrder);
+    localStorage.setItem("originalOrder", orderIDs)
 
 
     var listOfActions = ["Any Action", "Add", "Close", "Cut", "Dry", "Move", "Open", "Peel", "Put in", "Take out", "Wash"]
-    var listOfObjects = ["Any Object", "Bowl", "Carrot", "Cucumber", "Cutting board", "Frying pan", "Green beans", "Hand", "Knife", "Onion", "Parsley", "Pepper", "Pineapple", "Plate", "Potato", "Stove"]
+    var listOfObjects = ["Any Object", "Bowl", "Carrot", "Cucumber", "Cutting board", "Drawer", "Frying pan", "Green beans", "Hand", "Knife", "Onion", "Parsley", "Pepper", "Pineapple", "Plate", "Potato", "Stove"]
     var listOfLocations = ["Any Location", "Bowl", "Cupboard", "Cutting board", "Drawer", "Fridge", "Frying pan", "Plate", "Pot", "Sink", "Stove"]
     var addCombs = document.getElementById('combination-adder')
     var addAction = document.createElement("select")
@@ -132,6 +133,8 @@ function loadData(explanationsData, associationData) {
     //     .style("font-size","medium");
     // loadExplanation(explanationsData);
     // loadCharts(associationData, "#4dcee4");
+    originalOrder = el.getElementsByTagName("li");
+    console.log(makeIDList(originalOrder))
 }
 
 function loadExplanation (data) {
@@ -153,7 +156,7 @@ function loadExplanation (data) {
         .classed("explanation-options vertical-align-center", true)
         .html(function(d) {
             return "<b>"
-                + d.activity;
+                + d.action;
         });
 
     listItems1.append("a")

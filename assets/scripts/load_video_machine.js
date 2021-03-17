@@ -1,5 +1,18 @@
+var expFeedback = [];
+
+var ansFeedback = [];
+
+var evalFeedback = [];
+
+var userDiff = [];
+
 $(document).ready(function () {
     var condition = localStorage.getItem("condition");
+    var today = new Date();
+    localStorage.taskStart = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    //#TODO: change this
+    localStorage.id = "pilot1"
+
 
     if (localStorage.getItem("isPredictionTask") == "false") {
         if (condition == "3") /* This is no explanations */{
@@ -47,7 +60,7 @@ $(document).ready(function () {
 
     var currentVideoData = [];
 
-    var responses = [];
+
 
     var startTime;
 
@@ -57,7 +70,22 @@ $(document).ready(function () {
 
     var isFirstVideo = true;
 
-    var file = 'assets/data/video_list_main_new.json';
+    localStorage.setItem('groupCond', 1)
+    groupCond = localStorage.getItem('groupCond')
+    if (groupCond == "1") {
+      var file = 'assets/data/video_list_1.json';
+    }
+    else if (groupCond == "2") {
+      var file = 'assets/data/video_list_2.json';
+    }
+    else if (groupCond == "3") {
+      var file = 'assets/data/video_list_3.json';
+    }
+    else {
+      var file = 'assets/data/video_list_1.json';
+    }
+    console.log("groupCond: " + groupCond)
+    // var file = 'assets/data/video_list_main_new.json';
     // var file = 'assets/data/video_list_main Original.json';
     d3.json(file, function(error, data) {
         if (error)
@@ -75,15 +103,13 @@ $(document).ready(function () {
         }
 
         // This is to randomize the videos for each participant!
-        listOfVideos = shuffle(listOfVideos);
+        // listOfVideos = shuffle(listOfVideos);
 
         loadVideo();
     });
 
     this.radioChange = function () {
-        if ((isOptionSelected("#agree-disagree") && isOptionSelected("#evaluation")) ||
-            (isOptionSelected("#agree-disagree") && localStorage.getItem("condition") == "6") ||
-            (isOptionSelected("#agree-disagree") && localStorage.getItem("condition") == "3" && localStorage.getItem("isPredictionTask") == "false")) {
+        if ((isOptionSelected("#agree-disagree") && isOptionSelected("#evaluation"))) {
             d3.select("#submit").classed("disabled", false);
         }
     };
@@ -103,22 +129,24 @@ $(document).ready(function () {
     }
 
     this.onVideoLoaded = function() {
-
         document.getElementById("media-video").currentTime = 0;
         // This should be a different file for bad explanations!
-        if (localStorage.getItem("condition") == "2")
-            file = 'assets/data/video_new_bad.json';
-        else
-            file = 'assets/data/video_new_good.json';
+        // if (localStorage.getItem("condition") == "2")
+        //     file = 'assets/data/video_new_bad.json';
+        // else
+        //     file = 'assets/data/video_new_good.json';
+        // file = 'assets/data/video_new_good.json';
+        file = 'assets/data/explanations.json';
         d3.json(file, function(error, data){
             if (error)
                 console.log(error);
             for (var i = 0; i<data.length; i++){
+                console.log(data[i])
                 if (data[i].videoName == currentVideo.videoName) {
                     currentVideoData = data[i].listOfQuestions;
-
+                    console.log("here")
                     // shuffle the list of questions for each each video.
-                    currentVideoData = shuffle(currentVideoData);
+                    // currentVideoData = shuffle(currentVideoData);
 
                     break;
                 }
@@ -129,11 +157,12 @@ $(document).ready(function () {
             else
                 loadQuestionPrediction();
         });
+        d3.select("#submit").classed("disabled", true);
     }
 
     function loadQuestion() {
         var currentQuestion =  currentVideoData[nextQueryIndex++];
-        // console.log(currentQuestion);
+        console.log(currentVideoData);
     //    1 . show the question and respond on the page. (D3)
         showQuery(currentQuestion);
         showResponse(currentQuestion);
@@ -154,6 +183,45 @@ $(document).ready(function () {
         // Log the Click for current task
         var clickLocation = (localStorage.getItem("isPredictionTask")) == "false"?"performanceTask":"predictionTask";
         createClickLog("nxtQ", clickLocation);
+
+        // Record the answers
+        var el = document.getElementById('combination-ul');
+        userOrder = el.getElementsByTagName("li");
+        orderIDs = makeIDList(userOrder);
+        expFeedback.push(orderIDs)
+        expFeedback.push("|")
+
+        var agreeDisagree = getValueOfSelected("#agree-disagree");
+        ansFeedback.push(agreeDisagree)
+
+        var evaluation = getValueOfSelected("#evaluation");
+        evalFeedback.push(evaluation)
+
+        console.log("debug")
+
+
+        thisString = ""
+        for (i=0; i<orderIDs.length; i++) {
+          thisString = thisString + orderIDs[i]
+          if (i < orderIDs.length - 1) {
+            thisString = thisString + ","
+          }
+        }
+
+        console.log(localStorage.getItem("originalOrder"))
+        console.log(thisString)
+
+        if (localStorage.getItem("originalOrder") == thisString) {
+          userDiff.push(0)
+        }
+        else {
+          userDiff.push(1)
+        }
+        console.log(userDiff)
+
+        console.log(expFeedback)
+        console.log(ansFeedback)
+        console.log(evalFeedback)
 
         // Make sure the video Progress bar is zero (basically for tasks without segment explanations
         document.getElementById("media-video").currentTime = 0;
@@ -186,7 +254,9 @@ $(document).ready(function () {
                 loadQuestionPrediction();
         }
         uncheckAll();
-        toggleDisabilityRadioButtons();
+        console.log("here")
+        d3.select("#submit").classed("disabled", true);
+        // toggleDisabilityRadioButtons();
     };
 
     this.submitAndShowCorrectAnswer = function () {
@@ -202,7 +272,7 @@ $(document).ready(function () {
         // So to avoid misunderstanding of the user when they select confirmed the selection.
         // I want the user to not be able to change their respond in order to compare their answer with the correct answer.
 
-        toggleDisabilityRadioButtons();
+        // toggleDisabilityRadioButtons();
 
         var agreeDisagree = getValueOfSelected("#agree-disagree");
         var evaluation = getValueOfSelected("#evaluation");
@@ -218,12 +288,17 @@ $(document).ready(function () {
         var clickLocation = (localStorage.getItem("isPredictionTask")) == "false"?"rev":"pred";
         createClickLog("submit", clickLocation);
 
-        d3.select("#next").style("display", "block");
-        d3.select("#submit").style("display", "none");
+        // d3.select("#next").style("display", "block");
+        // d3.select("#submit").style("display", "none");
     };
 
     this.loadTaskAfterReview = function () {
-        localStorage.setItem("responsesReviewTask", JSON.stringify(responses));
+        // localStorage.setItem("responsesReviewTask", JSON.stringify(responses));
+
+        localStorage.setItem("expFeedback", expFeedback)
+        localStorage.setItem("ansFeedback", ansFeedback)
+        localStorage.setItem("evalFeedback", evalFeedback)
+        localStorage.setItem("userDiff", userDiff)
         localStorage.setItem("isPredictionTask", "true");
 
         // Changing the modal content to show a message before going to the next task!
@@ -231,10 +306,11 @@ $(document).ready(function () {
             .html("Task Complete!");
         d3.select(".modal-body > p")
             .html(function () {
-                if (localStorage.getItem("condition") == "3" || localStorage.getItem("condition") == "6")
-                    return "You have completed the task. Press continue.";
-                else
-                    return "You have completed the task. Press continue to answer a questionnaire about this task.";
+                return "You have completed the task. Press continue.";
+                // if (localStorage.getItem("condition") == "3" || localStorage.getItem("condition") == "6")
+                //     return "You have completed the task. Press continue.";
+                // else
+                //     return "You have completed the task. Press continue to answer a questionnaire about this task.";
             });
         d3.select(".modal-footer")
             .select("button").remove();
@@ -250,20 +326,21 @@ $(document).ready(function () {
                 //     // location.href = './prediction-task.html';
                 //     location.href = './Tutorial.html';
                 // No AI conditions go directly to the post-study questionnaire
-                if (localStorage.getItem("condition") == "6") {
-                    localStorage.setItem("isPredictionTask", "true");
-                    // location.href = './index.html';
-                    location.href = './post-study.html'
-                }
-                else
-                    location.href = './shortq.html';
+                location.href = './tempEnd.html'
+                // if (localStorage.getItem("condition") == "6") {
+                //     localStorage.setItem("isPredictionTask", "true");
+                //     // location.href = './index.html';
+                //     location.href = './post-study.html'
+                // }
+                // else
+                //     location.href = './shortq.html';
             });
 
         document.getElementById("modal-btn").click();
     };
 
     function loadTaskAfterPrediction () {
-        localStorage.setItem("responsesPredictionTask", JSON.stringify(responses));
+        // localStorage.setItem("responsesPredictionTask", JSON.stringify(responses));
 
         // Changing the modal content to show a message before going to the next task!
         d3.select(".modal-title")
@@ -279,8 +356,9 @@ $(document).ready(function () {
             .html("Continue")
             .on("click", function () {
                 // location.href = './index.html';
-                localStorage.setItem("predEnd", getDateTime());
-                location.href = './post-study.html';
+                // localStorage.setItem("predEnd", getDateTime());
+                // location.href = './post-study.html';
+                location.href = "./tempEnd.html"
             });
 
         document.getElementById("modal-btn").click();

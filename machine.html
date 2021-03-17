@@ -133,7 +133,59 @@
                   <strong>Error:</strong> One component must be selected
                 </div>
 
+
                 <div class="panel panel-primary" id="questions">
+                    <div class="panel-heading">
+                        <h class="header"><b>Please answer the following</b></h>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="col-md-12 component-header vertical-align-center component" style="background-color: #ffffff;">
+                            <h class="component"> Do you agree with the system's answer? </h>
+                        </div>
+                        <div class="btn-group col-md-8 col-md-offset-2 btn-group-modified" data-toggle="buttons" id="agree-disagree">
+                            <label for="" class="btn btn-primary col-md-5" style="margin-right:52px; border-bottom-right-radius: 4px;border-top-right-radius: 4px;">
+                                <input id="no" name="ad" type="radio" value="0" onchange="radioChange()"> No
+                            </label>
+                            <label for="" class="btn btn-primary col-md-5" style=" border-bottom-left-radius: 4px;border-top-left-radius: 4px;">
+                                <input id="yes" name="ad" type="radio" value="1" onchange="radioChange()"> Yes
+                            </label>
+                        </div>
+                        <div class="col-md-12 component-header vertical-align-center component" id="evaluation-question" style="background-color: #ffffff;">
+                            <h class="component"> How do you evaluate the original explanations for this question? </h>
+                        </div>
+                        <div class="btn-group col-md-12 btn-group-modified" data-toggle="buttons" id="evaluation">
+                            <label for="" class="btn btn-primary col-md-3" onchange="radioChange()">
+                                <input id="ti" name="ev" type="radio" value="-2">Totally Irrelevant
+                            </label>
+                            <label for="" class="btn btn-primary col-md-2" onchange="radioChange()">
+                                <input id="i" name="ev" type="radio" value="-1" >Irrelevant
+                            </label>
+                            <label for="" class="btn btn-primary col-md-2" onchange="radioChange()">
+                                <input id="n" name="ev" type="radio" value="0" >Neutral
+                            </label>
+                            <label for="" class="btn btn-primary col-md-2" onchange="radioChange()">
+                                <input id="r" name="ev" type="radio" value="1">Relevant
+                            </label>
+                            <label for="" class="btn btn-primary col-md-3" onchange="radioChange()">
+                                <input id="tr" name="ev" type="radio" value="2">Totally Relevant
+                            </label>
+                        </div>
+                        <div class="col-md-12" style="padding:  0px;border-bottom-right-radius:  3px; border-bottom-left-radius: 3px;">
+                            <!-- <button class="btn btn-default btn-large col-md-12 disabled" id="submit" onclick="submitAndShowCorrectAnswer()" style="font-size:15px;border-radius:0px;border-bottom-left-radius: 3px;">Submit Feedback
+                                <span><i class="fas fa-check-circle"></i></span>
+                            </button> -->
+                            <button class="btn btn-default btn-large col-md-12" id="submit" onclick="loadNextQuery()" style="font-size:15px;border-radius:0px;border-bottom-right-radius: 3px; display: block;">Submit Feedback
+                            <span><i class="fas fa-arrow-circle-right"></i></span>
+                        </button>
+                        </div>
+                    </div>
+
+                <!--<div>-->
+                    <!--<p> Do you agree with the system's answer to the query?</p>-->
+                <!--</div>-->
+            </div>
+                <!-- <div class="panel panel-primary" id="questions">
                     <div class="panel-body">
                         <div class="col-md-12" style="padding:  0px;border-bottom-right-radius:  3px; border-bottom-left-radius: 3px;">
                             <button class="btn btn-default btn-large col-md-12" id="next" onclick="loadNextQuery()" style="font-size:15px;border-radius:0px;border-bottom-right-radius: 3px;">Submit Changes
@@ -142,10 +194,8 @@
                         </div>
                     </div>
                 </div>
-                <!--<div>-->
-                    <!--<p> Do you agree with the system's answer to the query?</p>-->
-                <!--</div>-->
-            </div>
+            </div> -->
+
             <!--End of Explanation Div-->
 
             <!--Control Panel-->
