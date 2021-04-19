@@ -117,23 +117,94 @@ $(document).ready(function () {
         loadVideo();
     });
 
-    this.adChange = function () {
+    this.adChange0 = function () {
       adChanged = 1;
+      localStorage.setItem('adVal', 0);
+      console.log(localStorage.getItem('adVal'));
       radioChange();
     };
 
-    this.eChange = function () {
+    this.adChange1 = function () {
+      adChanged = 1;
+      localStorage.setItem('adVal', 1);
+      console.log(localStorage.getItem('adVal'));
+      radioChange();
+    };
+
+    this.eChangem2 = function () {
       eChanged = 1;
+      localStorage.setItem('eVal', -2);
+      console.log(localStorage.getItem('eVal'));
       radioChange();
     };
 
-    this.spChange = function () {
+    this.eChangem1 = function () {
+      eChanged = 1;
+      localStorage.setItem('eVal', -1);
+      console.log(localStorage.getItem('eVal'));
+      radioChange();
+    };
+
+    this.eChange0 = function () {
+      eChanged = 1;
+      localStorage.setItem('eVal', 0);
+      console.log(localStorage.getItem('eVal'));
+      radioChange();
+    };
+
+    this.eChange1 = function () {
+      eChanged = 1;
+      localStorage.setItem('eVal', 1);
+      console.log(localStorage.getItem('eVal'));
+      radioChange();
+    };
+
+    this.eChange2 = function () {
+      eChanged = 1;
+      localStorage.setItem('eVal', 2);
+      console.log(localStorage.getItem('eVal'));
+      radioChange();
+    };
+
+    this.spChangem1 = function () {
+      localStorage.setItem('spVal', -1);
+      console.log(localStorage.getItem('spVal'));
       spChanged = 1
       radioChange();
     };
 
-    this.epChange = function () {
+    this.spChange0 = function () {
+      spChanged = 1
+      localStorage.setItem('spVal', 0);
+      console.log(localStorage.getItem('spVal'));
+      radioChange();
+    };
+
+    this.spChange1 = function () {
+      spChanged = 1
+      localStorage.setItem('spVal', 1);
+      console.log(localStorage.getItem('spVal'));
+      radioChange();
+    };
+
+    this.epChangem1 = function () {
       epChanged = 1;
+      localStorage.setItem('epVal', -1);
+      console.log(localStorage.getItem('epVal'));
+      radioChange();
+    };
+
+    this.epChange0 = function () {
+      epChanged = 1;
+      localStorage.setItem('epVal', 0);
+      console.log(localStorage.getItem('epVal'));
+      radioChange();
+    };
+
+    this.epChange1 = function () {
+      epChanged = 1;
+      localStorage.setItem('epVal', 1);
+      console.log(localStorage.getItem('epVal'));
       radioChange();
     };
 
@@ -221,19 +292,19 @@ $(document).ready(function () {
         expFeedback.push(orderIDs)
         expFeedback.push("|")
 
-        var agreeDisagree = getValueOfSelected("#agree-disagree");
+        var agreeDisagree = localStorage.getItem('adVal');
         ansFeedback.push(agreeDisagree)
 
-        var evaluation = getValueOfSelected("#evaluation");
+        var evaluation = localStorage.getItem('eVal');
         evalFeedback.push(evaluation)
 
-        var startEval = getValueOfSelected("#startPrecise");
+        var startEval = localStorage.getItem('spVal');
         startFeedback.push(startEval);
 
-        var endEval = getValueOfSelected("#endPrecise");
+        var endEval = localStorage.getItem('epVal');
         endFeedback.push(endEval);
 
-        console.log("debug")
+        console.log(ansFeedback + ":" + evalFeedback + ":" + startFeedback + ":" + endFeedback)
 
 
         thisString = ""
