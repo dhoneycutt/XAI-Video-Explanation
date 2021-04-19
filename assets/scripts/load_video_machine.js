@@ -14,8 +14,6 @@ $(document).ready(function () {
     var condition = localStorage.getItem("condition");
     var today = new Date();
     localStorage.taskStart = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    //#TODO: change this
-    localStorage.id = "pilot1"
 
 
     if (localStorage.getItem("isPredictionTask") == "false") {
