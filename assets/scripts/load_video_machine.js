@@ -4,6 +4,10 @@ var ansFeedback = [];
 
 var evalFeedback = [];
 
+var startFeedback = [];
+
+var endFeedback = [];
+
 var userDiff = [];
 
 $(document).ready(function () {
@@ -70,6 +74,11 @@ $(document).ready(function () {
 
     var isFirstVideo = true;
 
+    var adChanged = 0;
+    var eChanged = 0;
+    var spChanged = 0;
+    var epChanged = 0;
+
     localStorage.setItem('groupCond', 1)
     groupCond = localStorage.getItem('groupCond')
     if (groupCond == "1") {
@@ -108,8 +117,29 @@ $(document).ready(function () {
         loadVideo();
     });
 
+    this.adChange = function () {
+      adChanged = 1;
+      radioChange();
+    };
+
+    this.eChange = function () {
+      eChanged = 1;
+      radioChange();
+    };
+
+    this.spChange = function () {
+      spChanged = 1
+      radioChange();
+    };
+
+    this.epChange = function () {
+      epChanged = 1;
+      radioChange();
+    };
+
     this.radioChange = function () {
-        if ((isOptionSelected("#agree-disagree") && isOptionSelected("#evaluation"))) {
+      console.log("A: " + adChanged + ", B: " + eChanged + ", C: " + spChanged + ", D: " + epChanged)
+        if (adChanged && eChanged && spChanged && epChanged) {
             d3.select("#submit").classed("disabled", false);
         }
     };
@@ -197,6 +227,12 @@ $(document).ready(function () {
         var evaluation = getValueOfSelected("#evaluation");
         evalFeedback.push(evaluation)
 
+        var startEval = getValueOfSelected("#startPrecise");
+        startFeedback.push(startEval);
+
+        var endEval = getValueOfSelected("#endPrecise");
+        endFeedback.push(endEval);
+
         console.log("debug")
 
 
@@ -222,6 +258,8 @@ $(document).ready(function () {
         console.log(expFeedback)
         console.log(ansFeedback)
         console.log(evalFeedback)
+        console.log(startFeedback)
+        console.log(endFeedback)
 
         // Make sure the video Progress bar is zero (basically for tasks without segment explanations
         document.getElementById("media-video").currentTime = 0;
@@ -298,6 +336,8 @@ $(document).ready(function () {
         localStorage.setItem("expFeedback", expFeedback)
         localStorage.setItem("ansFeedback", ansFeedback)
         localStorage.setItem("evalFeedback", evalFeedback)
+        localStorage.setItem("startFeedback", startFeedback)
+        localStorage.setItem("endFeedback", endFeedback)
         localStorage.setItem("userDiff", userDiff)
         localStorage.setItem("isPredictionTask", "true");
 
@@ -388,6 +428,10 @@ $(document).ready(function () {
                 d3.select(this).node().checked = false;
             });
         d3.selectAll('label').classed("active", false);
+        adChanged = 0;
+        eChanged = 0;
+        spChanged = 0;
+        epChanged = 0;
     }
 
     function toggleDisabilityRadioButtons() {
@@ -405,6 +449,7 @@ $(document).ready(function () {
         var isChecked = false;
         d3.select(id)
             .selectAll("input").each(function (d) {
+                console.log("ID: " + id + ", Node: " + d3.select(this).node().id + ", Checked: " + d3.select(this).node().checked)
                 if (d3.select(this).node().checked == true)
                     isChecked = true;
             });

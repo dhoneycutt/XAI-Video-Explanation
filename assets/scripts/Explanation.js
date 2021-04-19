@@ -19,10 +19,15 @@ function loadData(explanationsData, associationData) {
     var el = document.getElementById('combination-ul');
     for (var i = 0; i < listOfCombinations.length; i++) {
       var li = document.createElement("li")
+      li.innerHTML += "<span class='badge'>" + (i + 1) + "</span>  "
       li.appendChild(document.createTextNode(listOfCombinations[i]))
       li.setAttribute("id", listOfCombinations[i])
+      li.insertAdjacentHTML('beforeend', '<a href="#" onclick="deleteLi(\'' + listOfCombinations[i] + '\')" class="delete">X</a>')
       el.appendChild(li)
     }
+
+
+
 
 
     var combinationSort = Sortable.create(el);
@@ -31,9 +36,9 @@ function loadData(explanationsData, associationData) {
     localStorage.setItem("originalOrder", orderIDs)
 
 
-    var listOfActions = ["Any Action", "Add", "Close", "Cut", "Dry", "Move", "Open", "Peel", "Put in", "Take out", "Wash"]
-    var listOfObjects = ["Any Object", "Bowl", "Carrot", "Cucumber", "Cutting board", "Drawer", "Frying pan", "Green beans", "Hand", "Knife", "Onion", "Parsley", "Pepper", "Pineapple", "Plate", "Potato", "Stove"]
-    var listOfLocations = ["Any Location", "Bowl", "Cupboard", "Cutting board", "Drawer", "Fridge", "Frying pan", "Plate", "Pot", "Sink", "Stove"]
+    var listOfActions = ["any action", "add", "close", "cut", "dry", "move", "open", "peel", "put in", "take out", "wash"]
+    var listOfObjects = ["any object", "bowl", "carrot", "cucumber", "cutting board", "drawer", "frying pan", "green beans", "hand", "knife", "onion", "parsley", "pepper", "pineapple", "plate", "potato", "stove"]
+    var listOfLocations = ["any location", "bowl", "cupboard", "cutting board", "drawer", "fridge", "frying pan", "plate", "pot", "sink", "stove"]
     var addCombs = document.getElementById('combination-adder')
     var addAction = document.createElement("select")
     addAction.setAttribute("id", "addAction")
@@ -70,10 +75,42 @@ function loadData(explanationsData, associationData) {
     addCombs.appendChild(addLocation)
     addCombs.setAttribute("style", "text-align: center;")
 
+    var button2 = document.createElement("button");
+    button2.setAttribute("class", "btn btn-primary col-md-5")
+    button2.setAttribute("id", "reset-combination")
+    button2.innerHTML = "Reset Activities";
+    addCombs.appendChild(button2)
+    button2.addEventListener ("click", function() {
+      // Delete all list elements
+      liElements = document.getElementsByTagName("li")
+      liIDs = []
+      for (i = 0; i < liElements.length; i++) {
+        liIDs.push(liElements[i].id)
+      }
+      for (i = 0; i < liIDs.length; i++) {
+        deleteLi(liIDs[i])
+      }
+
+      // Re-add the original list elements
+      var el = document.getElementById('combination-ul');
+      for (var i = 0; i < listOfCombinations.length; i++) {
+        var li = document.createElement("li")
+        li.innerHTML += "<span class='badge'>" + (i + 1) + "</span>  "
+        li.appendChild(document.createTextNode(listOfCombinations[i]))
+        li.setAttribute("id", listOfCombinations[i])
+        li.insertAdjacentHTML('beforeend', '<a href="#" onclick="deleteLi(\'' + listOfCombinations[i] + '\')" class="delete">X</a>')
+        el.appendChild(li)
+      }
+    });
+
+    var btnDivider = document.createElement("div")
+    btnDivider.setAttribute("class", "divider")
+    addCombs.appendChild(btnDivider)
+
     var button = document.createElement("button");
     button.setAttribute("class", "btn btn-primary col-md-5")
     button.setAttribute("id", "submit-combination")
-    button.innerHTML = "Add Combination";
+    button.innerHTML = "Add Activity";
     addCombs.appendChild(button)
     button.addEventListener ("click", function() {
       var newAct = document.getElementById("addAction").value;
@@ -107,6 +144,10 @@ function loadData(explanationsData, associationData) {
         document.getElementById('anyError').style.display = "block"
       }
     });
+
+
+
+
 
 
 
@@ -214,8 +255,9 @@ function makeIDList(userOrder) {
 }
 
 function deleteLi(liID) {
-  deleteLi = document.getElementById(liID)
-  deleteLi.parentNode.removeChild(deleteLi)
+  console.log("liID: " + liID);
+  deleteLiEl = document.getElementById(liID)
+  deleteLiEl.parentNode.removeChild(deleteLiEl)
   var el = document.getElementById('combination-ul');
   userOrder = el.getElementsByTagName("li");
   orderIDs = makeIDList(userOrder);

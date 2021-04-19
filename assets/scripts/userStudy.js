@@ -254,6 +254,7 @@ function prepareResults() {
     results.predStart = localStorage.getItem("predStart");
     results.predEnd = localStorage.getItem("predEnd");
 
+
     return JSON.stringify(results);
 
 }

@@ -1,16 +1,16 @@
 $(document).ready(function () {
     imageIdentity = "A";
-    var condition = localStorage.getItem("condition");
-    if (localStorage.getItem("isPredictionTask") == "true")
-        imageIdentity = "P";
-    else if (condition == "3")
-        imageIdentity = "B";
-    else if (condition == "4")
-        imageIdentity = "C";
-    else if (condition == "5")
-        imageIdentity = "D";
-    else if (condition == "6")
-        imageIdentity = "E";
+    // var condition = localStorage.getItem("condition");
+    // if (localStorage.getItem("isPredictionTask") == "true")
+    //     imageIdentity = "P";
+    // else if (condition == "3")
+    //     imageIdentity = "B";
+    // else if (condition == "4")
+    //     imageIdentity = "C";
+    // else if (condition == "5")
+    //     imageIdentity = "D";
+    // else if (condition == "6")
+    //     imageIdentity = "E";
 
 });
 function loadNextImage() {

@@ -859,6 +859,7 @@ li
   background-color: #c7e5ff;
   border-radius: 10px;
   font-size: 20px;
+  cursor: pointer;
 }
 
 /* class applies to select element itself, not a wrapper element */
@@ -993,8 +994,15 @@ ol {
   text-align: right;
 }
 
+.divider{
+    width:20px;
+    height:auto;
+    display:inline-block;
+}
+
 #submit-combination {
   width: 45%;
+  display: inline-block;
 }
 
 .newComb {
