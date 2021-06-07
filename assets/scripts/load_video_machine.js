@@ -10,6 +10,8 @@ var endFeedback = [];
 
 var userDiff = [];
 
+var questionCount = 0
+
 $(document).ready(function () {
     var condition = localStorage.getItem("condition");
     var today = new Date();
@@ -77,19 +79,27 @@ $(document).ready(function () {
     var spChanged = 0;
     var epChanged = 0;
 
-    localStorage.setItem('groupCond', 1)
+    // localStorage.setItem('groupCond', 1)
     groupCond = localStorage.getItem('groupCond')
     if (groupCond == "1") {
       var file = 'assets/data/video_list_1.json';
+      var totalSegments = 38;
     }
     else if (groupCond == "2") {
       var file = 'assets/data/video_list_2.json';
+      var totalSegments = 36;
     }
     else if (groupCond == "3") {
       var file = 'assets/data/video_list_3.json';
+      var totalSegments = 37;
+    }
+    else if (groupCond == "4") {
+      var file = 'assets/data/video_list_test.json';
+      var totalSegments = 5;
     }
     else {
       var file = 'assets/data/video_list_1.json';
+      var totalSegments = 38;
     }
     console.log("groupCond: " + groupCond)
     // var file = 'assets/data/video_list_main_new.json';
@@ -527,6 +537,7 @@ $(document).ready(function () {
 
     function showQuery(currentQuestion) {
         var queryDiv = d3.select("#query-section");
+        questionCount = questionCount + 1
         queryDiv.html("");
         //header
         queryDiv.append("div")
@@ -534,7 +545,7 @@ $(document).ready(function () {
             .attr("id", "question-section-header")
             .append("h")
             .classed("component", true)
-            .html("Question from the Video");
+            .html("Question from the Video (" + questionCount + "/" + totalSegments +  ")");
         //query
         queryDiv.append("div")
             .attr("id","query")
@@ -543,6 +554,7 @@ $(document).ready(function () {
             .html(function () {
                 return currentQuestion.questionText;
             });
+
     }
 
     function showResponse(currentQuestion) {

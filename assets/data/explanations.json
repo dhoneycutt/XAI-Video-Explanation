@@ -3237,15 +3237,6 @@
       },
       {
         "questionId": 7,
-        "computerAnswer": "No",
-        "listOfKeyFrames": [
-          {}
-        ],
-        "questionText": "Does the person dry his hand?",
-        "correctAnswer": "No"
-      },
-      {
-        "questionId": 8,
         "computerAnswer": "Yes",
         "listOfKeyFrames": [
           {
@@ -4969,7 +4960,7 @@
               {
                 "action": "close",
                 "approximation": 3,
-                "object": "plate", 
+                "object": "plate",
                 "location": "cupboard"
               },
               {

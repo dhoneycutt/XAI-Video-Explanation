@@ -12,8 +12,18 @@ function grantConsentToParticipate() {
     localStorage.setItem("id", generateID());
     // var condition = Link();
     localStorage.setItem("condition", generateCondition());
+    inVars = getUrlVars()
+    localStorage.setItem('groupCond', inVars["cond"])
     // localStorage.setItem("conditionLink",condition[1]);
     // location.href = condition[1];
+}
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
 }
 
 function generateID() {
@@ -184,7 +194,7 @@ function showConsentForm() {
             // window.alert("THANKS!");
             grantConsentToParticipate();
             // showQuestionnaire();
-            location.href = "./background.html";
+            location.href = "./background.html?cond=" + localStorage.getItem("groupCond");
         });
 
     var mainContainer = d3.select("#main-container");

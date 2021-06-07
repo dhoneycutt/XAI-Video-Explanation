@@ -12,6 +12,10 @@ function loadData(explanationsData, associationData) {
 
     var listOfCombinations = []
     for(var i = 0; i < explanationsData.length; i++) {
+      // Convert n/a to any <thing>
+      if (explanationsData[i]['action'] == "n/a") { explanationsData[i]['action'] = "any action" }
+      if (explanationsData[i]['object'] == "n/a") { explanationsData[i]['object'] = "any object" }
+      if (explanationsData[i]['location'] == "n/a") { explanationsData[i]['location'] = "any location" }
       var tempString = explanationsData[i]['action'] + " + " + explanationsData[i]['object'] + " + " + explanationsData[i]['location']
       listOfCombinations.push(tempString)
     }

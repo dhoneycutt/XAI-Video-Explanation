@@ -60,6 +60,10 @@ function togglePlayPause() {
     if (getIcon.classList.contains('fa-play')) {
         getIcon.classList.remove('fa-play');
         getIcon.classList.add('fa-pause');
+        // Check whether at end of segment to move to beginning
+        if (mediaPlayer.currentTime >= segEnd) {
+          mediaPlayer.currentTime = segStart - 0.2
+        }
         mediaPlayer.play();
     } else {
         getIcon.classList.remove('fa-pause');
@@ -443,8 +447,8 @@ function change_segment(time,end,explanations,associations){
     // t=d3.timer(timeOut); //if you want the segment playing to stop, comment this line out
 
     // loop_segment(expStart, expEnd);
-    clear_list();
-    loadData(explanations, associations);
+    // clear_list();
+    // loadData(explanations, associations);
 }
 
 function loop_segment(time,end) {
